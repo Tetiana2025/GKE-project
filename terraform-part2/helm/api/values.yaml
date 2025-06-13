@@ -19,6 +19,8 @@ env:
     value: root
   - name: DB_PASS
     value: password
+  - name: PORT
+    value: "3001"
 
 resources:
   limits:
