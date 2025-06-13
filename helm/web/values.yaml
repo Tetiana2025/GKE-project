@@ -1,0 +1,18 @@
+replicaCount: 2
+image:
+  repository: tetianabahlai/web
+  tag: latest
+service:
+  type: LoadBalancer
+  port: 80
+containerPort: 3000
+env:
+  API_URL: http://api
+  SESSION_SECRET: supersecret
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
