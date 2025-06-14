@@ -5,3 +5,6 @@ replicaCount: 1
 mysqlRootPassword: password
 storage:
   size: 1Gi
+persistence:
+  enabled: true
+  existingClaim: mysql-pvc
