@@ -1,13 +1,19 @@
 image:
   repository: mysql
   tag: 5.7
+
 replicaCount: 1
 mysqlRootPassword: password
+
+mysqlDatabase: mydb   
+
 storage:
   size: 1Gi
+
 persistence:
   enabled: true
 #  existingClaim: mysql-pvc
+
 initContainers:
   - name: clear-mysql-data
     image: busybox:latest 

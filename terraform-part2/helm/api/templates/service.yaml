@@ -10,4 +10,4 @@ spec:
     app: api
   ports:
     - port: 80
-      targetPort: 3001
+      targetPort: {{ .Values.containerPort }}
