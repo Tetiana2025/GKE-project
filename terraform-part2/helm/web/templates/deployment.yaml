@@ -19,30 +19,30 @@ spec:
     spec:
       containers:
       - name: web
-        image: tetianabahlai/web:latest
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         ports:
-        - containerPort: 3000
-        envFrom:
-        - configMapRef:
-            name: web-config
-        - secretRef:
-            name: web-secret
+        - containerPort: {{ .Values.containerPort }}
+        env:
+          - name: API_URL
+            value: "{{ .Values.env.API_URL }}"
+          - name: SESSION_SECRET
+            value: "{{ .Values.env.SESSION_SECRET }}"
         readinessProbe:
           httpGet:
             path: /health
-            port: 3000
+            port: {{ .Values.containerPort }}
           initialDelaySeconds: 5
           periodSeconds: 10
         livenessProbe:
           httpGet:
             path: /health
-            port: 3000
+            port: {{ .Values.containerPort }}
           initialDelaySeconds: 15
           periodSeconds: 20
         resources:
           requests:
-            cpu: "100m"
-            memory: "128Mi"
+            cpu: "{{ .Values.resources.requests.cpu }}"
+            memory: "{{ .Values.resources.requests.memory }}"
           limits:
-            cpu: "200m"
-            memory: "256Mi"
+            cpu: "{{ .Values.resources.limits.cpu }}"
+            memory: "{{ .Values.resources.limits.memory }}"

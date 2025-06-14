@@ -1,14 +1,19 @@
 replicaCount: 2
+
 image:
   repository: tetianabahlai/web
   tag: latest
+
 service:
   type: LoadBalancer
   port: 80
+
 containerPort: 3000
+
 env:
-  API_URL: http://api
+  API_URL: http://104.154.199.155   # static IP of API LoadBalancer
   SESSION_SECRET: supersecret
+
 resources:
   limits:
     cpu: 200m

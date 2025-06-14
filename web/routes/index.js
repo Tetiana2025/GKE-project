@@ -13,7 +13,9 @@ router.get('/', function(req, res, next) {
             json: true
         },
         function(error, response, body) {
-            if (error || response.statusCode !== 200) {
+            console.log('API Response:', error, body);  // <-- add this for debugging
+
+            if (error || response.statusCode !== 200 || !Array.isArray(body) || !body[0]) {
                 return res.status(500).send('error running request to ' + api_url);
             } else {
                 res.render('index', {

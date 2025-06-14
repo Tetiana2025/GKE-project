@@ -23,7 +23,13 @@ spec:
           ports:
             - containerPort: {{ .Values.containerPort }}
           env:
-            {{- toYaml .Values.env | nindent 12 }}
+            {{- range .Values.env }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+              {{- end }}
+          envFrom:
+            - secretRef:
+                name: api-secret
           readinessProbe:
             httpGet:
               path: /health

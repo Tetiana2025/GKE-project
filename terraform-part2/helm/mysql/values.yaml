@@ -7,4 +7,12 @@ storage:
   size: 1Gi
 persistence:
   enabled: true
-  existingClaim: mysql-pvc
+#  existingClaim: mysql-pvc
+initContainers:
+  - name: clear-mysql-data
+    image: busybox:latest 
+    command: ["sh", "-c"]
+    args: ["echo 'Clearing MySQL data directory' && rm -rf /var/lib/mysql/* || true && echo 'Directory cleared.'"]
+    volumeMounts:
+      - name: mysql-pvc 
+        mountPath: /var/lib/mysql
