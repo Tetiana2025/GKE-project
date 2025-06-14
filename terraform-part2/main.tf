@@ -4,6 +4,7 @@ resource "helm_release" "api" {
   namespace  = "default"
   create_namespace = true
   timeout = 600
+  version    = "1.0.0" 
   values     = [file("./helm/api/values.yaml")]
 }
 

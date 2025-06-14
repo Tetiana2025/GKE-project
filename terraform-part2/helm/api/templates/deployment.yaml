@@ -27,9 +27,10 @@ spec:
             - name: {{ .name }}
               value: {{ .value | quote }}
               {{- end }}
-          envFrom:
-            - secretRef:
-                name: api-secret
+              {{- range .Values.secretEnv }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+              {{- end }}
           readinessProbe:
             httpGet:
               path: /health
