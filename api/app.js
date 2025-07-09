@@ -5,11 +5,11 @@ var mysql = require('mysql2');
 
 // MySQL connection configuration
 const conString = {
-    user: process.env.DBUSER,
+    user: process.env.DB_USER,
     database: process.env.DB,
-    password: process.env.DBPASS,
-    host: process.env.DBHOST,
-    port: process.env.DBPORT
+    password: process.env.DB_PASS,
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT
 };
 
 var pool = mysql.createPool(conString);

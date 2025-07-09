@@ -1,19 +1,17 @@
 replicaCount: 2
-
 image:
-  repository: tetianabahlai/web
+  repository: us-central1-docker.pkg.dev/gke-project-462023/web/web
   tag: latest
-
+  pullPolicy: Always
 service:
   type: LoadBalancer
   port: 80
-
 containerPort: 3000
-
 env:
-  API_URL: http://104.154.199.155   # static IP of API LoadBalancer
-  SESSION_SECRET: supersecret
-
+  - name: API_HOST
+    value: "http://api:3001"
+  - name: SESSION_SECRET
+    value: "supersecret"
 resources:
   limits:
     cpu: 200m

@@ -13,17 +13,10 @@ spec:
       labels:
         app: mysql
     spec:
-      initContainers:
-        - name: clear-mysql-data
-          image: busybox:latest 
-          command: ["sh", "-c"]
-          args: ["echo 'Clearing MySQL data directory...' && rm -rf /var/lib/mysql/* || true && echo 'Directory cleared.'"]
-          volumeMounts:
-            - name: mysql-pvc 
-              mountPath: /var/lib/mysql
       containers:
       - name: mysql
-        image: mysql:5.7
+        image: mysql:8
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 3306
         env:
@@ -43,4 +36,3 @@ spec:
       resources:
         requests:
           storage: 1Gi
-      storageClassName: standard

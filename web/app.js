@@ -9,55 +9,61 @@ var routes = require('./routes/index');
 
 var app = express();
 
-// view engine setup
+// View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// Middleware
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Health check endpoint
-app.get('/health', function(req, res) {
+// Health check
+app.get('/health', function (req, res) {
     res.status(200).send('OK');
-  });
+});
 
+// Config endpoint for frontend
+const API_BASE_URL = process.env.API_URL || 'http://localhost:3001';
+
+app.get('/config', (req, res) => {
+    res.json({ apiUrl: API_BASE_URL });
+});
+
+// API status proxy
+app.get('/api-status', async (req, res) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/status`);
+        if (!response.ok) {
+            throw new Error(`API returned ${response.status}`);
+        }
+        const data = await response.json();
+        res.json(data);
+    } catch (err) {
+        console.error("Proxy error:", err.message);
+        res.status(500).json({ error: 'API proxy failed' });
+    }
+});
+
+// Main routes
 app.use('/', routes);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
+// 404 handler
+app.use(function (req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
-// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render({
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+// Error handler
+app.use(function (err, req, res, next) {
     res.status(err.status || 500);
-    res.render({
+    res.render('error', {
         message: err.message,
-        error: {}
+        error: app.get('env') === 'development' ? err : {}
     });
 });
-
 
 module.exports = app;
